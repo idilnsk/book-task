@@ -1,4 +1,7 @@
 import styled from "styled-components";
+import React, { useState } from 'react';
+import AuthForm from './AuthForm';
+import ChangePassword from './ChangePassword';
 
 const Headline = styled.h1`
   position: fixed;
@@ -13,5 +16,22 @@ const Headline = styled.h1`
 `;
 
 export default function TitleBar() {
-  return <Headline>Emilias books</Headline>;
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const logIn = () => setIsLoggedIn(true);
+  const logOut = () => setIsLoggedIn(false);
+
+  return (
+    <Headline>
+      Emilias books
+      {isLoggedIn ? (
+        <>
+          <ChangePassword onPasswordChange={logOut} />
+          <button onClick={logOut}>Log Out</button>
+        </>
+      ) : (
+        <AuthForm onLogin={logIn} />
+      )}
+    </Headline>
+  );
 }
