@@ -58,6 +58,8 @@ export default function DetailsPage() {
         {book.name}, {book.author}
       </h2>
       <p>{book.description}</p>
+      <p>ISBN:{book.isbn}</p>
+      <p>Price:{book.price}</p>
       <ButtonContainer>
         <Link href={`/books/${id}/edit`} passHref legacyBehavior>
           <StyledLink>Edit</StyledLink>

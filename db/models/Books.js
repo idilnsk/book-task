@@ -5,6 +5,8 @@ const booksSchema = new Schema({
   author: { type: String, required: true },
   image: { type: String, required: true },
   description: { type: String, required: true },
+  isbn: { type: Number, required: true }, 
+  price: { type: Number, required: true } 
 });
 const Books = mongoose.models.Books || mongoose.model("Books", booksSchema);
 export default Books;

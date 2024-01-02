@@ -63,6 +63,20 @@ export default function Form({ onSubmit, formName, defaultData }) {
         rows="10"
         defaultValue={defaultData?.description}
       ></Textarea>
+          <Label htmlFor="isbn">ISBN</Label>
+      <Input
+        id="isbn"
+        name="isbn"
+        type="number"
+        defaultValue={defaultData?.isbn}
+      />
+          <Label htmlFor="price">Price</Label>
+      <Input
+        id="price"
+        name="price"
+        type="number"
+        defaultValue={defaultData?.price}
+      />
       <StyledButton type="submit">
         {defaultData ? "Update book" : "Add book"}
       </StyledButton>
