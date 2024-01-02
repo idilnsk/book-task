@@ -9,7 +9,9 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     // Handle login
     const { username, password } = req.body
-    const user = await User.findOne({ username });
+    const user = await User.findOne({
+      $or: [{ username }, { email: username }] // username field can be either a username or an email
+    });
 
     if (!user) {
       return res.status(401).json({ message: 'User not found' });
@@ -22,14 +24,13 @@ export default async function handler(req, res) {
       expiresIn: '1d',
     });
 
-    // Return the token and the user's ID
     res.status(200).json({
       message: 'Login successful',
       token: token,
-      userId: user._id // Include the user ID in the response
+      userId: user._id, 
+      username: user.username,
     });
   } else {
-    // Handle any other HTTP method
     res.setHeader('Allow', ['POST'])
     res.status(405).end(`Method ${req.method} Not Allowed`)
   }

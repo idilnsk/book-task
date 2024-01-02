@@ -24,15 +24,18 @@ const StyledInput = styled.input`
 const StyledButton = styled.button`
   padding: 10px 15px;
   border: none;
-  border-radius: 5px;
-  background-color: blue;
+  border-radius: 10px; // Rounded corners
+  background-color: lightorange; // Light orange color
   color: white;
   cursor: pointer;
+  margin-left: 10px;
+  
 
   &:hover {
-    background-color: darkblue;
+    background-color: darkorange;
   }
 `;
+
 
 const Message = styled.p`
   color: green;
@@ -40,34 +43,30 @@ const Message = styled.p`
 
 
 export default function AuthForm({ onLogin }) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+    const [loginIdentifier, setLoginIdentifier] = useState('');
+    const [loginPassword, setLoginPassword] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
-  const handleRegister = async () => {
-    try {
-      await axios.post('/api/register', { username, password });
-      setMessage('User created successfully');
-      setError('');
-    } catch (error) {
-      setMessage('');
-      setError('Registration failed: ' + error.message);
-    }
-  };
-
-  const handleLogin = async () => {
-    try {
-      const response = await axios.post('/api/auth', { username, password });
-      // Handle the response, store the token, redirect the user, etc.
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('userId', response.data.userId);
+  const handleLogin = async (event) => {
+      event.preventDefault(); 
+      try {
+          const response = await axios.post('/api/auth', {
+              username: loginIdentifier,
+              password: loginPassword
+            });
+            console.log("Login successful", response.data); 
+            
+            const { token, userId, username } = response.data;
+      localStorage.setItem('token', token);
+      localStorage.setItem('userId', userId);
+      localStorage.setItem('username', username); 
       setMessage('Login successful');
       setError('');
-      onLogin();
+      onLogin(true, username); 
     } catch (err) {
-      setMessage('');
-      setError('Login failed: ' + err.response.data.message); // Use the actual error message from the server
+      console.error("Login error", err); 
+      setError('Login failed: ' + (err.response ? err.response.data.message : 'An unknown error occurred'));
     }
   };
 
@@ -76,21 +75,20 @@ export default function AuthForm({ onLogin }) {
       <StyledForm>
         <StyledInput
           type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Username/Email"
+          value={loginIdentifier}
+          onChange={(e) => setLoginIdentifier(e.target.value)}
         />
         <StyledInput
           type="password"
           placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={loginPassword}
+          onChange={(e) => setLoginPassword(e.target.value)}
         />
-        {message && <Message>{message}</Message>}
-        {error && <Message style={{ color: 'red' }}>{error}</Message>}
-        <StyledButton type="button" onClick={handleLogin}>Login</StyledButton>
-        <StyledButton type="button" onClick={handleRegister}>Register</StyledButton>
+        <StyledButton onClick={handleLogin}>Login</StyledButton>
       </StyledForm>
+      {message && <Message style={{ color: 'green' }}>{message}</Message>}
+      {error && <Message style={{ color: 'red' }}>{error}</Message>}
     </Container>
   );
 }

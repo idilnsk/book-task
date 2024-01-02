@@ -12,14 +12,11 @@ const getCurrentUserId = () => {
 
   const handleChangePassword = async () => {
     try {
-      // Assuming you have a way to get the current user's ID
       const userId = getCurrentUserId();
       await axios.post('/api/change-password', { userId, oldPassword, newPassword });
       onPasswordChange();
-      // Optionally reset input fields or give feedback to the user
     } catch (error) {
       console.error('Failed to change password:', error);
-      // Handle errors (e.g., show error message to the user)
     }
   };
 

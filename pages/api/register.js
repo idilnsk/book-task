@@ -1,30 +1,27 @@
-import dbConnect from '../../db/connect'; // Your database connection logic
-import User from '../../db/models/User'; // Your user model
+import dbConnect from '../../db/connect'; 
+import User from '../../db/models/User'; 
 import bcrypt from 'bcryptjs';
 
 export default async function handler(req, res) {
   await dbConnect();
 
   if (req.method === 'POST') {
-    // Handle user registration
     try {
-      const { username, password } = req.body;
+      const { username,email, password} = req.body;
 
-      // Check if user already exists
-      const existingUser = await User.findOne({ username });
+      const existingUser = await User.findOne({ 
+        $or: [{ username }, { email }] 
+      });
       if (existingUser) {
-        return res.status(409).json({ message: 'User already exists' });
+        return res.status(409).json({ message: 'Username or Email already exists' });
       }
 
-    
-
-      // Create a new user
-      const user = new User({
+          const user = new User({
         username,
+        email,
         password,
       });
 
-      // Save the new user
       await user.save();
 
       res.status(201).json({ message: 'User created successfully' });
