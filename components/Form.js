@@ -29,6 +29,12 @@ export default function Form({ onSubmit, formName, defaultData }) {
     event.preventDefault();
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
+    for (let [key, value] of formData.entries()) {
+      if (!value) {
+        alert('Please fill out all the form fields to submit a book.');
+        return;
+      }
+    }
     onSubmit(data);
   }
 

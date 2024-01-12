@@ -15,7 +15,7 @@ export default async function handler(request, response) {
       response.status(201).json({ status: "Book created" });
     } catch (error) {
       console.log(error);
-      response.status(400).jason({ error: error.message });
+      response.status(400).json({ error: error.message });
     }
   } else {
     return response.status(405).json({ message: "Not Found" });
