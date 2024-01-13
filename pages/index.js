@@ -31,7 +31,9 @@ export default function Home() {
         {data.map((book) => {
           return (
             <ListItem key={book._id}>
-              <Card name={book.name} image={book.image} id={book._id} />
+              <Card name={book.name} image={book.image} id={book._id} 
+              userId={book.user?._id}
+              addedBy={book.user?.username || 'Non-registered user'}/>
             </ListItem>
           );
         })}

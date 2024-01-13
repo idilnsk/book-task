@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { StyledButton } from "./StyledButton.js";
 
+
 const FormContainer = styled.form`
   display: grid;
   gap: 0.5rem;
@@ -24,7 +25,27 @@ const Label = styled.label`
   font-weight: bold;
 `;
 
+
+function getCurrentUserId() {
+
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.userId; 
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return null;
+    }
+  }
+  return null;
+}
+
+
 export default function Form({ onSubmit, formName, defaultData }) {
+  const currentUserId = getCurrentUserId();
   function handleSubmit(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
@@ -35,6 +56,11 @@ export default function Form({ onSubmit, formName, defaultData }) {
         return;
       }
     }
+
+    if (currentUserId) {
+      data.userId = currentUserId;
+    }
+  
     onSubmit(data);
   }
 

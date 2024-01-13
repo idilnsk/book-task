@@ -2,6 +2,10 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
 const userSchema = new mongoose.Schema({
+  booksAdded: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Books'
+  }],
   username: {
     type: String,
     required: true,

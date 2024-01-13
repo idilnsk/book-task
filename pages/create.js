@@ -11,13 +11,17 @@ const StyledBackLink = styled(StyledLink)`
 export default function CreateBookPage() {
   const router = useRouter();
   async function addBook(book) {
+    const token = localStorage.getItem('token'); 
+  
     const response = await fetch("/api/books", {
       method: "POST",
       body: JSON.stringify(book),
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}` 
       },
     });
+  
     if (response.ok) {
       await response.json();
       router.push("/");
@@ -29,8 +33,11 @@ export default function CreateBookPage() {
     <>
       <h2 id="add-book">Add Book</h2>
       <Link href="/" passHref legacyBehavior>
-        <StyledBackLink>back</StyledBackLink>
-      </Link>
+  <a>
+    <StyledBackLink>back</StyledBackLink>
+  </a>
+</Link>
+
       <Form onSubmit={addBook} formName={"add-book"} />
     </>
   );

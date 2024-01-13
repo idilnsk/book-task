@@ -42,27 +42,30 @@ const ScreenReaderOnly = styled.span`
   border-width: 0;
 `;
 
-export default function Card({ name, image, id }) {
+export default function Card({ name, image, id, userId, addedBy }) {
+
+  console.log("Image URL:", image);
   return (
     <Article>
       <Figure>
         <ImageContainer>
-          <StyledImage
-            src={image}
-            fill
-            sizes="(max-width: 768px) 100vw,
-              (max-width: 1200px) 50vw,
-              33vw"
-            alt=""
-          />
+          <StyledImage src={image} fill alt={name} />
         </ImageContainer>
         <figcaption>{name}</figcaption>
+        {/* Conditional link to user profile */}
+        {userId ? (
+          <Link href={`/users/${userId}`} passHref legacyBehavior>
+            <a>Added by: {addedBy}</a>
+          </Link>
+        ) : (
+          <p>Added by: {addedBy}</p>
+        )}
       </Figure>
-      <Link href={`books/${id}`} passHref legacyBehavior>
+      <Link href={`books/${id}`} passHref>
         <Anchor>
           <ScreenReaderOnly>More Info</ScreenReaderOnly>
         </Anchor>
       </Link>
     </Article>
-  );
-}
+  )
+};
